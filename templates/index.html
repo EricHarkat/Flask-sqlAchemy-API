@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div clas ="row">
+        <div class="col md-12">
+            <div class="jumbotron p-3">
+                <h2 > Manage <b>Works</b> <button type="button" class="btn btn-success float-right" data-bs-target="#mymodal" data-bs-toggle="modal">Add New Works   <img style="width:30px" src="/static/pics/united.svg"></button></h2>
+
+
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages%}
+
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>{{message}}</strong>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+
+
+                <table class="table table-hover table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Zone</th>
+                        <th>Work Done</th>
+                        <th>Date</th>
+                        <th>Organization</th>
+                        <th>Action</th>
+
+                    </tr>
+                {% for row in works %}
+                    <tr>
+                        <td>{{row.id}}</td>
+                        <td>{{row.name}}</td>
+                        <td>{{row.email}}</td>
+                        <td>{{row.phone}}</td>
+                        <td>{{row.zone}}</td>
+                        <td>{{row.work}}</td>
+                        <td>{{row.date}}</td>
+                        <td>{{row.organization}}</td>
+                        <td>
+                            <a href="/update/{{row.id}}" class="btn btn-warning btn-xs mx-2" data-bs-toggle="modal" data-bs-target="#mymodaledit{{row.id}}">Edit   <img style="width:25px" src="/static/pics/edit.svg">
+                            <a href="/delete/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure to delete ?')">Delete   <img style="width:25px" src="/static/pics/delete.svg">
+                        </td>
+                    </tr>
+
+                    <!--Modale Add Employee-->
+
+                    <div id="mymodal" class="modal fade" role="dialog">
+                        <div class="modal-dialog" >
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title">Add Employee</h5>
+                            </div>
+                            <div class="modal-body">
+                            <form action="{{url_for('insert')}}" method="POST">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" class="form-control" name="name" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email:</label>
+                                    <input type="email" class="form-control" name="email" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone:</label>
+                                    <input type="number" class="form-control" name="phone" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Zone:</label>
+                                    <input type="text" class="form-control" name="zone" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Work:</label>
+                                    <input type="text" class="form-control" name="work" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Date:</label>
+                                    <input type="text" class="form-control" name="date" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Organization:</label>
+                                    <input type="text" class="form-control" name="organization" required="1">
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit">Add Work</button>
+                                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <!--Modale update Employee-->
+
+                    <div id="mymodaledit{{row.id}}" class="modal fade" role="dialog">
+                        <div class="modal-dialog" >
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title">update Employee</h5>
+                            </div>
+                            <div class="modal-body">
+                            <form action="{{url_for('update')}}" method="POST">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="hidden" name="id" value="{{row.id}}">
+                                    <input type="text" class="form-control" name="name" value="{{row.name}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email:</label>
+                                    <input type="text" class="form-control" name="email" value="{{row.email}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone:</label>
+                                    <input type="text" class="form-control" name="phone" value="{{row.phone}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Zone:</label>
+                                    <input type="text" class="form-control" name="zone" value="{{row.zone}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Work:</label>
+                                    <input type="text" class="form-control" name="work" value="{{row.work}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Date:</label>
+                                    <input type="text" class="form-control" name="date" value="{{row.date}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Organization:</label>
+                                    <input type="text" class="form-control" name="organization" value="{{row.organization}}">
+                                </div>
+                            <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit" >Update work</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                    </div>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
